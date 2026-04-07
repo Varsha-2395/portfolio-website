@@ -254,7 +254,16 @@
                         <a href="assets/resume.pdf" target="_blank" rel="noopener noreferrer" class="inline-link">Resume</a>
                     </div>
                 </div>
-                <form class="contact-card" id="contactForm">
+                <form
+                    class="contact-card"
+                    id="contactForm"
+                    data-recipient-email="varshavs2005@gmail.com"
+                >
+                    <input type="hidden" name="_subject" value="New portfolio contact message">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_template" value="table">
+                    <input type="text" name="_honey" class="contact-honeypot" tabindex="-1" autocomplete="off">
+
                     <label for="name">Name</label>
                     <input type="text" id="name" name="name" placeholder="Your name" required>
 
@@ -265,6 +274,7 @@
                     <textarea id="message" name="message" rows="5" placeholder="Tell me something..." required></textarea>
 
                     <button type="submit" class="btn btn-primary">Send Message</button>
+                    <p class="form-status" id="formStatus" aria-live="polite"></p>
                 </form>
             </div>
         </section>

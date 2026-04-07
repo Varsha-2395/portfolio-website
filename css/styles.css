@@ -226,6 +226,12 @@ textarea {
     box-shadow: 0 14px 30px rgba(33, 70, 61, 0.18);
 }
 
+.btn:disabled {
+    cursor: wait;
+    opacity: 0.8;
+    transform: none;
+}
+
 .btn-secondary {
     background: rgba(255, 255, 255, 0.5);
     border-color: rgba(31, 41, 51, 0.08);
@@ -498,6 +504,35 @@ textarea {
 .contact-card textarea:focus {
     outline: 2px solid rgba(194, 106, 61, 0.2);
     border-color: rgba(194, 106, 61, 0.45);
+}
+
+.contact-honeypot {
+    position: absolute;
+    left: -9999px;
+}
+
+.form-note {
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.form-note code {
+    font-family: "Manrope", sans-serif;
+    font-weight: 700;
+}
+
+.form-status {
+    min-height: 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.form-status.is-success {
+    color: var(--accent);
+}
+
+.form-status.is-error {
+    color: #b5473f;
 }
 
 .site-footer {

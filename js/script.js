@@ -6,6 +6,20 @@ const revealItems = document.querySelectorAll(
     ".content-card, .project-card, .metric-card, .timeline-item, .contact-card"
 );
 const contactForm = document.getElementById("contactForm");
+const formStatus = document.getElementById("formStatus");
+
+const setFormStatus = (message, state = "") => {
+    if (!formStatus) {
+        return;
+    }
+
+    formStatus.textContent = message;
+    formStatus.className = "form-status";
+
+    if (state) {
+        formStatus.classList.add(`is-${state}`);
+    }
+};
 
 if (navToggle && navMenu) {
     navToggle.addEventListener("click", () => {
@@ -68,18 +82,58 @@ if ("IntersectionObserver" in window) {
 }
 
 if (contactForm) {
-    contactForm.addEventListener("submit", (event) => {
+    const submitButton = contactForm.querySelector('button[type="submit"]');
+
+    contactForm.addEventListener("submit", async (event) => {
         event.preventDefault();
         const name = document.getElementById("name")?.value.trim();
         const email = document.getElementById("email")?.value.trim();
         const message = document.getElementById("message")?.value.trim();
+        const recipientEmail = contactForm.dataset.recipientEmail?.trim();
 
         if (!name || !email || !message) {
-            window.alert("Please fill in all the fields.");
+            setFormStatus("Please fill in all the fields.", "error");
             return;
         }
 
-        window.alert(`Thanks ${name}, your message is ready to be shared.`);
-        contactForm.reset();
+        if (!recipientEmail || recipientEmail === "YOUR_EMAIL@example.com") {
+            setFormStatus("Add your real recipient email in the contact form before using this button.", "error");
+            return;
+        }
+
+        const formData = new FormData(contactForm);
+
+        try {
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.textContent = "Sending...";
+            }
+
+            setFormStatus("Sending your message...", "success");
+
+            const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(recipientEmail)}`, {
+                method: "POST",
+                headers: {
+                    Accept: "application/json"
+                },
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || result.success !== "true") {
+                throw new Error("Message delivery failed.");
+            }
+
+            setFormStatus(`Thanks ${name}, your message was sent successfully.`, "success");
+            contactForm.reset();
+        } catch (error) {
+            setFormStatus("Message could not be sent right now. Please try again in a moment.", "error");
+        } finally {
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.textContent = "Send Message";
+            }
+        }
     });
 }
